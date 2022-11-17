@@ -4,7 +4,6 @@ const videoDir = path.join(__dirname,'video');
 const fs = require('fs');
 
 exports.listAPI = (req,res) => {
-    console.log(videoDir);
     videoData.find()
     .then(result => {
         res.status(200).json({
