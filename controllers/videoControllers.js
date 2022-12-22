@@ -1,6 +1,5 @@
 const videoData = require("../model/videoData.js");
 const path = require('path');
-const videoDir = path.join(__dirname,'video');
 const fs = require('fs');
 
 exports.listAPI = (req,res) => {
@@ -37,11 +36,7 @@ exports.detailAPI = (req,res) => {
 
 exports.streamAPI = (req,res) => {
     const range = req.headers.range
-    if(!range){
-        res.status(400).send("requires range headers");
-    }
-    const videoShow = videoData.find({_id:req.params.id});
-    const videoPath = path.join(videoDir,videoShow.path);
+    const videoPath = path.join(__dirname,'../assests/video.mp4');
     const videoSize = fs.statSync(videoPath).size;
     const chunkSize = 10**6;
     const start = Number(range.replace(/\D/g,""));
@@ -56,4 +51,7 @@ exports.streamAPI = (req,res) => {
     res.writeHead(206,headers);
     const videoStream = fs.createReadStream(videoPath,{start,end});
     videoStream.pipe(res);
+    if(!range){
+        res.status(400).send("requires range headers");
+    }
 }
